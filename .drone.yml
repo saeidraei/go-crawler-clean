@@ -1,6 +1,6 @@
 workspace:
   base: /go
-  path: src/github.com/saeidraei/go-realworld-clean
+  path: src/github.com/saeidraei/go-crawler-clean
 
 pipeline:
   prerequisites:

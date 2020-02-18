@@ -2,15 +2,13 @@ package main
 
 import (
 	"fmt"
-	urlRw "github.com/saeidraei/go-realworld-clean/implem/mysql.urlRW"
-	cacheRw "github.com/saeidraei/go-realworld-clean/implem/redis.cacheRW"
-	urlValidator "github.com/saeidraei/go-realworld-clean/implem/url.validator"
+	queueRW "github.com/saeidraei/go-crawler-clean/implem/redis.queueRW"
+	urlValidator "github.com/saeidraei/go-crawler-clean/implem/url.validator"
 
-	migrate "github.com/saeidraei/go-realworld-clean/db"
-	"github.com/saeidraei/go-realworld-clean/implem/gin.server"
-	"github.com/saeidraei/go-realworld-clean/implem/logrus.logger"
-	"github.com/saeidraei/go-realworld-clean/infra"
-	"github.com/saeidraei/go-realworld-clean/uc"
+	"github.com/saeidraei/go-crawler-clean/implem/gin.server"
+	"github.com/saeidraei/go-crawler-clean/implem/logrus.logger"
+	"github.com/saeidraei/go-crawler-clean/infra"
+	"github.com/saeidraei/go-crawler-clean/uc"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -24,7 +22,7 @@ var (
 
 // the command to run the server
 var rootCmd = &cobra.Command{
-	Use:   "go-realworld-clean",
+	Use:   "go-crawler-clean",
 	Short: "Runs the server",
 	Run: func(cmd *cobra.Command, args []string) {
 		run()
@@ -39,17 +37,8 @@ var versionCmd = &cobra.Command{
 	},
 }
 
-var migrationCmd = &cobra.Command{
-	Use:   "migrate",
-	Short: "Run the migration",
-	Run: func(cmd *cobra.Command, args []string) {
-		migrate.RunMigration()
-	},
-}
-
 func main() {
 	rootCmd.AddCommand(versionCmd)
-	rootCmd.AddCommand(migrationCmd)
 	cobra.OnInitialize(infra.CobraInitialization)
 
 	infra.LoggerConfig(rootCmd)
@@ -75,8 +64,7 @@ func run() {
 	server.NewRouterWithLogger(
 		uc.HandlerConstructor{
 			Logger:       routerLogger,
-			UrlRW:        urlRw.New(),
-			CacheRW:      cacheRw.New(),
+			QueueRW:      queueRW.New(),
 			UrlValidator: urlValidator.New(),
 		}.New(),
 		routerLogger,

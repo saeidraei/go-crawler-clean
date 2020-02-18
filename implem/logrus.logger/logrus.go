@@ -3,7 +3,7 @@ package logger
 import (
 	"log"
 
-	"github.com/saeidraei/go-realworld-clean/uc"
+	"github.com/saeidraei/go-crawler-clean/uc"
 	"github.com/sirupsen/logrus"
 )
 

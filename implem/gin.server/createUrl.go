@@ -1,11 +1,10 @@
 package server
 
 import (
-	"github.com/saeidraei/go-realworld-clean/domain"
+	"github.com/saeidraei/go-crawler-clean/domain"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/saeidraei/go-realworld-clean/implem/json.formatter"
 )
 
 type UrlReq struct {
@@ -20,7 +19,7 @@ func urlFromRequest(req *UrlReq) domain.Url {
 	}
 }
 
-func (rH RouterHandler) createUrl(c *gin.Context) {
+func (rH RouterHandler) addUrl(c *gin.Context) {
 	log := rH.log(rH.MethodAndPath(c))
 
 	req := &UrlReq{}
@@ -31,7 +30,7 @@ func (rH RouterHandler) createUrl(c *gin.Context) {
 		return
 	}
 
-	url, err := rH.ucHandler.UrlPost(urlFromRequest(req))
+	err := rH.ucHandler.UrlPost(urlFromRequest(req))
 	if err != nil {
 		log(err)
 		c.Errors = append(c.Errors, &gin.Error{Err:err,Type:gin.ErrorTypePublic})
@@ -39,5 +38,5 @@ func (rH RouterHandler) createUrl(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusCreated, gin.H{"url": formatter.NewUrlFromDomain(*url)})
+	c.JSON(http.StatusCreated, gin.H{"status": "successful"})
 }

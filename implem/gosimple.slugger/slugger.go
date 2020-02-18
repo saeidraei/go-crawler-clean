@@ -2,7 +2,7 @@ package slugger
 
 import (
 	"github.com/gosimple/slug"
-	"github.com/saeidraei/go-realworld-clean/uc"
+	"github.com/saeidraei/go-crawler-clean/uc"
 )
 
 type slugger struct{}

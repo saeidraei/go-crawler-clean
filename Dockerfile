@@ -20,4 +20,4 @@ EXPOSE 8080
 
 
 # Command to run the executable
-CMD ./main migrate && ./main
+CMD ./main

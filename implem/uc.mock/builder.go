@@ -5,21 +5,15 @@ package mock
 import (
 	"log"
 
-	"github.com/saeidraei/go-realworld-clean/uc"
+	"github.com/saeidraei/go-crawler-clean/uc"
 	"github.com/golang/mock/gomock"
 )
 
 // Interactor : is used in order to update its properties accordingly to each test conditions
 type Interactor struct {
 	Logger           *MockLogger
-	UserRW           *MockUserRW
-	ArticleRW        *MockArticleRW
+	UrlRW           *MockUrlRW
 	UserValidator    *MockUserValidator
-	AuthHandler      *MockAuthHandler
-	Slugger          *MockSlugger
-	ArticleValidator *MockArticleValidator
-	TagsRW           *MockTagsRW
-	CommentRW        *MockCommentRW
 }
 
 type Tester struct {
@@ -37,14 +31,8 @@ func (SimpleLogger) Log(logs ...interface{}) {
 func NewMockedInteractor(mockCtrl *gomock.Controller) Interactor {
 	return Interactor{
 		Logger:           NewMockLogger(mockCtrl),
-		UserRW:           NewMockUserRW(mockCtrl),
-		ArticleRW:        NewMockArticleRW(mockCtrl),
 		UserValidator:    NewMockUserValidator(mockCtrl),
-		AuthHandler:      NewMockAuthHandler(mockCtrl),
-		Slugger:          NewMockSlugger(mockCtrl),
-		ArticleValidator: NewMockArticleValidator(mockCtrl),
-		TagsRW:           NewMockTagsRW(mockCtrl),
-		CommentRW:        NewMockCommentRW(mockCtrl),
+		UrlRW:      NewMockUrlRW(mockCtrl),
 	}
 }
 
@@ -52,13 +40,7 @@ func NewMockedInteractor(mockCtrl *gomock.Controller) Interactor {
 func (i Interactor) GetUCHandler() uc.Handler {
 	return uc.HandlerConstructor{
 		Logger:           i.Logger,
-		UserRW:           i.UserRW,
-		ArticleRW:        i.ArticleRW,
-		UserValidator:    i.UserValidator,
-		AuthHandler:      i.AuthHandler,
-		Slugger:          i.Slugger,
-		ArticleValidator: i.ArticleValidator,
-		TagsRW:           i.TagsRW,
-		CommentRW:        i.CommentRW,
+		UrlRW:            i.UrlRW,
+		UrlValidator:    i.UserValidator,
 	}.New()
 }

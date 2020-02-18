@@ -3,7 +3,7 @@ package server
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
-	"github.com/saeidraei/go-realworld-clean/uc"
+	"github.com/saeidraei/go-crawler-clean/uc"
 )
 
 type RouterHandler struct {
@@ -33,8 +33,8 @@ func (rH RouterHandler) SetRoutes(r *gin.Engine) {
 
 func (rH RouterHandler) urlRoutes(api *gin.RouterGroup) {
 	profiles := api.Group("url")
-	profiles.GET("/:id", rH.redirectUrl)
-	profiles.POST("", rH.createUrl) //
+	profiles.GET("/list", rH.listUrls)
+	profiles.POST("", rH.addUrl) //
 }
 
 func (rH RouterHandler) errorCatcher() gin.HandlerFunc {

@@ -4,8 +4,8 @@ import (
 	"errors"
 
 	"github.com/asaskevich/govalidator"
-	"github.com/saeidraei/go-realworld-clean/domain"
-	"github.com/saeidraei/go-realworld-clean/uc"
+	"github.com/saeidraei/go-crawler-clean/domain"
+	"github.com/saeidraei/go-crawler-clean/uc"
 )
 
 type urlValidator struct{}

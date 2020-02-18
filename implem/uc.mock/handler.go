@@ -7,7 +7,7 @@ package mock
 import (
 	reflect "reflect"
 
-	domain "github.com/saeidraei/go-realworld-clean/domain"
+	domain "github.com/saeidraei/go-crawler-clean/domain"
 	gomock "github.com/golang/mock/gomock"
 )
 

@@ -1,18 +1,18 @@
 package uc
 
 import (
-	"github.com/saeidraei/go-realworld-clean/domain"
+	"github.com/saeidraei/go-crawler-clean/domain"
 	"math/rand"
 	"strings"
 	"time"
 )
 
-func (i interactor) UrlPost(url domain.Url) (*domain.Url, error) {
+func (i interactor) UrlPost(url domain.Url) error {
 
 	//if there is a validator validate the url
 	if i.urlValidator != nil {
 		if err := i.urlValidator.BeforeCreationCheck(&url); err != nil {
-			return nil, err
+			return err
 		}
 	}
 
@@ -21,12 +21,12 @@ func (i interactor) UrlPost(url domain.Url) (*domain.Url, error) {
 	if !strings.Contains(url.Address,"://"){
 		url.Address = "http://" + url.Address
 	}
-	completeUrl, err := i.urlRW.Create(url)
+	err := i.queueRW.Enqueue("waiting",url)
 	if err != nil {
-		return nil, err
+		return err
 	}
 
-	return completeUrl, nil
+	return  nil
 }
 
 const letterBytes = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"

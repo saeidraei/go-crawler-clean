@@ -1,7 +1,7 @@
 package formatter
 
 import (
-	"github.com/saeidraei/go-realworld-clean/domain"
+	"github.com/saeidraei/go-crawler-clean/domain"
 )
 
 type Url struct {

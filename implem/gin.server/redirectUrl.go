@@ -6,16 +6,15 @@ import (
 	"net/http"
 )
 
-func (rH RouterHandler) redirectUrl(c *gin.Context) {
+func (rH RouterHandler) listUrls(c *gin.Context) {
 	log := rH.log(rH.MethodAndPath(c))
 
-	url, err := rH.ucHandler.UrlGet(c.Param("id"))
+	urls, err := rH.ucHandler.UrlList()
 	if err != nil {
 		log(err)
 		c.Errors = append(c.Errors, &gin.Error{Err:errors.New("url not found"),Type:gin.ErrorTypePrivate})
 		c.Status(http.StatusNotFound)
 		return
 	}
-	c.Redirect(http.StatusMovedPermanently, url.Address)
-	c.Abort()
+	c.JSON(http.StatusOK,gin.H{"urls":urls})
 }
