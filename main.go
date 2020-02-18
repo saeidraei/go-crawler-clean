@@ -2,8 +2,11 @@ package main
 
 import (
 	"fmt"
+	crawlerApi "github.com/saeidraei/go-crawler-clean/implem/nethtml.crawlerApi"
 	queueRW "github.com/saeidraei/go-crawler-clean/implem/redis.queueRW"
 	urlValidator "github.com/saeidraei/go-crawler-clean/implem/url.validator"
+	httpRequestApi "github.com/saeidraei/go-crawler-clean/implem/httpClient.httpRequestApi"
+	"time"
 
 	"github.com/saeidraei/go-crawler-clean/implem/gin.server"
 	"github.com/saeidraei/go-crawler-clean/implem/logrus.logger"
@@ -50,6 +53,18 @@ func main() {
 	}
 }
 
+func worker(h uc.Handler , id int) {
+	for {
+		fmt.Println("worker", id, "started  job", 1)
+		res , err := h.CrawlUrl()
+		time.Sleep(time.Second)
+		fmt.Println("worker", id, "finished job", 1)
+		fmt.Println("res", res, )
+		fmt.Println("err", err, )
+		//results <- j * 2
+	}
+}
+
 func run() {
 	ginServer := infra.NewServer(
 		viper.GetInt("server.port"),
@@ -61,12 +76,18 @@ func run() {
 		viper.GetString("log.format"),
 	)
 
+	handler := uc.HandlerConstructor{
+		Logger:         routerLogger,
+		QueueRW:        queueRW.New(),
+		UrlValidator:   urlValidator.New(),
+		CrawlerApi:     crawlerApi.New(),
+		HttpRequestApi: httpRequestApi.New(),
+	}.New()
+	for w := 1; w <= 3; w++ {
+		go worker(handler,w)
+	}
 	server.NewRouterWithLogger(
-		uc.HandlerConstructor{
-			Logger:       routerLogger,
-			QueueRW:      queueRW.New(),
-			UrlValidator: urlValidator.New(),
-		}.New(),
+		handler,
 		routerLogger,
 	).SetRoutes(ginServer.Router)
 

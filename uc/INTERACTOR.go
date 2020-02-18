@@ -10,6 +10,8 @@ type interactor struct {
 	logger       Logger
 	urlValidator UrlValidator
 	queueRW      QueueRW
+	crawlerApi   CrawlerApi
+	httpRequestApi HttpRequestApi
 }
 
 // Logger : only used to log stuff
@@ -21,6 +23,13 @@ type QueueRW interface {
 	Enqueue(key string, value domain.Url) error
 	Dequeue(key string) (*domain.Url, error)
 	All(key string) ([]*domain.Url, error)
+}
+
+type CrawlerApi interface {
+	GetTitle(htmlString string)(string , bool)
+}
+type HttpRequestApi interface {
+	GetHtml(url string)(string , error)
 }
 
 type UrlValidator interface {

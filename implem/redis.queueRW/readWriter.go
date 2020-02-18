@@ -37,7 +37,7 @@ func (rw rw) Enqueue(key string, value domain.Url) error {
 func (rw rw) Dequeue(key string) (*domain.Url, error) {
 	val, err := rw.client.RPop(key).Result()
 	if err != nil {
-		panic(err)
+		return nil,err
 	}
 	var url domain.Url
 	err = json.Unmarshal([]byte(val), &url)

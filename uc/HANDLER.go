@@ -13,12 +13,15 @@ type Handler interface {
 type UrlLogic interface {
 	UrlPost(url domain.Url) error
 	UrlList() ([]*domain.Url, error)
+	CrawlUrl() (string, error)
 }
 
 type HandlerConstructor struct {
 	Logger       Logger
 	UrlValidator UrlValidator
 	QueueRW      QueueRW
+	CrawlerApi   CrawlerApi
+	HttpRequestApi   HttpRequestApi
 }
 
 func (c HandlerConstructor) New() Handler {
@@ -28,10 +31,15 @@ func (c HandlerConstructor) New() Handler {
 	if c.QueueRW == nil {
 		log.Fatal("missing QueueRW")
 	}
+	if c.CrawlerApi == nil {
+		log.Fatal("missing CrawlerApi")
+	}
 
 	return interactor{
 		logger:       c.Logger,
 		queueRW:      c.QueueRW,
 		urlValidator: c.UrlValidator,
+		crawlerApi:   c.CrawlerApi,
+		httpRequestApi: c.HttpRequestApi,
 	}
 }
