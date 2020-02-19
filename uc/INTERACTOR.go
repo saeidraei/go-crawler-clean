@@ -20,7 +20,7 @@ type Logger interface {
 }
 
 type QueueRW interface {
-	Enqueue(key string, value domain.Url) error
+	Enqueue(key string, value *domain.Url) error
 	Dequeue(key string) (*domain.Url, error)
 	All(key string) ([]*domain.Url, error)
 }

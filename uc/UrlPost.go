@@ -21,7 +21,7 @@ func (i interactor) UrlPost(url domain.Url) error {
 	if !strings.Contains(url.Address,"://"){
 		url.Address = "http://" + url.Address
 	}
-	err := i.queueRW.Enqueue("waiting",url)
+	err := i.queueRW.Enqueue("waiting",&url)
 	if err != nil {
 		return err
 	}

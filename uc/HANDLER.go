@@ -12,8 +12,8 @@ type Handler interface {
 
 type UrlLogic interface {
 	UrlPost(url domain.Url) error
-	UrlList() ([]*domain.Url, error)
-	CrawlUrl() (string, error)
+	UrlList() (map[string][]*domain.Url, error)
+	CrawlUrl(workerId string)
 }
 
 type HandlerConstructor struct {

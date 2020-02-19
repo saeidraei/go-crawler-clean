@@ -6,6 +6,7 @@ import (
 	queueRW "github.com/saeidraei/go-crawler-clean/implem/redis.queueRW"
 	urlValidator "github.com/saeidraei/go-crawler-clean/implem/url.validator"
 	httpRequestApi "github.com/saeidraei/go-crawler-clean/implem/httpClient.httpRequestApi"
+	"strconv"
 	"time"
 
 	"github.com/saeidraei/go-crawler-clean/implem/gin.server"
@@ -46,7 +47,7 @@ func main() {
 
 	infra.LoggerConfig(rootCmd)
 	infra.ServerConfig(rootCmd)
-	infra.DatabaseConfig(rootCmd)
+	infra.CrawlerConfig(rootCmd)
 
 	if err := rootCmd.Execute(); err != nil {
 		logrus.WithError(err).Fatal()
@@ -55,12 +56,8 @@ func main() {
 
 func worker(h uc.Handler , id int) {
 	for {
-		fmt.Println("worker", id, "started  job", 1)
-		res , err := h.CrawlUrl()
+		h.CrawlUrl(strconv.Itoa(id))
 		time.Sleep(time.Second)
-		fmt.Println("worker", id, "finished job", 1)
-		fmt.Println("res", res, )
-		fmt.Println("err", err, )
 		//results <- j * 2
 	}
 }
@@ -83,7 +80,7 @@ func run() {
 		CrawlerApi:     crawlerApi.New(),
 		HttpRequestApi: httpRequestApi.New(),
 	}.New()
-	for w := 1; w <= 3; w++ {
+	for w := 1; w <= 5; w++ {
 		go worker(handler,w)
 	}
 	server.NewRouterWithLogger(

@@ -24,8 +24,8 @@ func New() uc.QueueRW {
 		client: client,
 	}
 }
-func (rw rw) Enqueue(key string, value domain.Url) error {
-	b, _ := json.Marshal(value)
+func (rw rw) Enqueue(key string, value *domain.Url) error {
+	b, _ := json.Marshal(*value)
 	err := rw.client.LPush(key, b).Err()
 	if err != nil {
 		return err
