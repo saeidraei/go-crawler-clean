@@ -1,21 +1,15 @@
 package uc
 
-import "fmt"
-
 func (i interactor) CrawlUrl(workerId string) {
 	url, err := i.queueRW.Dequeue("waiting")
 	if err != nil || url == nil {
-		crawlerPrint(workerId, "no url to crawl")
-
+		crawlerPrint(&i, workerId, "no url to crawl")
 		return
 	}
-	if err != nil {
-		panic(err)
-	}
-	crawlerPrint(workerId, "sending http get request")
+	crawlerPrint(&i, workerId, "sending http get request")
 	html, err := i.httpRequestApi.GetHtml(url.Address)
 	if err != nil {
-		crawlerPrint(workerId,
+		crawlerPrint(&i, workerId,
 			"could not get response from url:"+url.Address)
 		url.FailedCount++
 		// if crawl is failed more than 3 times stop crawling
@@ -34,13 +28,13 @@ func (i interactor) CrawlUrl(workerId string) {
 		}
 		return
 	}
-	crawlerPrint(workerId, "http get request was successful")
+	crawlerPrint(&i, workerId, "http get request was successful")
 	title, ok := i.crawlerApi.GetTitle(html)
 	if ok != true || title == "" {
-		crawlerPrint(workerId, "there is no title")
+		crawlerPrint(&i, workerId, "there is no title")
 		url.NoTitle = true
 	} else {
-		crawlerPrint(workerId, "title has been set successfully")
+		crawlerPrint(&i, workerId, "title has been set successfully")
 		url.NoTitle = false
 		url.Title = title
 	}
@@ -50,6 +44,6 @@ func (i interactor) CrawlUrl(workerId string) {
 	}
 }
 
-func crawlerPrint(workerId string, message string) {
-	fmt.Println("worker" + workerId + " : " + message)
+func crawlerPrint(i *interactor, workerId string, message string) {
+	i.logger.Log("worker" + workerId + " : " + message)
 }
