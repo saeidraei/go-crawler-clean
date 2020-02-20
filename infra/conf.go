@@ -33,6 +33,8 @@ func ServerConfig(cmd *cobra.Command) {
 	cmd.Flags().String("server.allowedOrigins", "*", "allowed origins for the server")
 	cmd.Flags().String("server.token", "", "authorization token to use if any")
 	cmd.Flags().String("jwt.salt", "", "used to sign the JWTs")
+	cmd.Flags().String("redis.host", "redis", "redis host")
+	cmd.Flags().String("redis.port", "6379", "redis port")
 	viper.BindPFlags(cmd.Flags())
 }
 
